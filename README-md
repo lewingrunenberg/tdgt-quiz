@@ -1,0 +1,81 @@
+# TdgT Quiz
+
+Interaktives Multiple-Choice-Quiz zu Künstlicher Intelligenz und dem EU-KI-Rechtsrahmen. Die Anwendung ist ein statischer Single-Page-Frontend-Stack (HTML/CSS/Vanilla JS) und kann ohne Build-Tooling ausgeliefert werden – beispielsweise per Nginx-Container hinter Traefik.
+
+---
+
+## Highlights
+
+- Countdown-basiertes Quiz (Standard: 60 Sekunden pro Frage) mit Statusanzeige, Fortschrittsleiste und Auswertung.
+- Fragenkatalog direkt in `script.js` gepflegt – ideal für einfache Bearbeitung ohne Backend.
+- Komplett clientseitig, daher auch offline nutzbar (lokal im Browser oder statisch gehostet).
+- Font Awesome 5.15.4 und die Poppins-Schriftart liegen direkt im Repository und müssen nicht nachgeladen werden.
+- Fertige `docker-compose.yml` zur Bereitstellung via `nginx:stable-alpine` inkl. Traefik-Labels.
+
+---
+
+## Projektstruktur
+
+```text
+tdgt-quiz/
+├── docker-compose.yml         # Nginx + Traefik-Konfiguration
+├── index.html                 # Markup für Einstieg, Quiz-Flow, Resultate
+├── script.js                  # Fragenpool, Timer, UI-Logik
+├── style.css                  # Layout, Animationen, Farbwelt
+├── poppins.css + poppins-*/   # Self-hosted Poppins-Webfont
+├── Font-Awesome-5.15.4/       # Font-Awesome Assets (CSS, Fonts, JS)
+└── start_flag.png             # Dekografik (falls im Layout verwendet)
+```
+
+---
+
+## Lokales Setup
+
+1. Repository holen und in das Projektverzeichnis wechseln.
+2. Für ein schnelles Preview genügt das Öffnen von `index.html` im Browser.
+3. Für ein realistisches Setup empfiehlt sich ein kleiner lokaler Webserver, z. B.:
+
+   ```bash
+   python -m http.server 8080
+   # oder
+   npx serve .
+   ```
+
+4. Anschließend `http://localhost:8080` im Browser aufrufen.
+
+Hinweis: Da alle Assets lokal eingebunden werden, ist keine zusätzliche Paketinstallation erforderlich.
+
+---
+
+## Deployment mit Docker & Traefik
+
+Die mitgelieferte `docker-compose.yml` startet einen Nginx-Container, mountet das Repository read-only nach `/usr/share/nginx/html` und annotiert den Service für Traefik.
+
+```bash
+docker network create web  # einmalig, falls das externe Traefik-Netz noch nicht existiert
+docker compose up -d
+```
+
+Die Traefik-Labels legen `chat.tdgt.grunenberg.org` als Host fest und nutzen den `websecure` EntryPoint inkl. TLS-Zertifikat über `lets-encrypt`. Passe Domain, Netzwerk oder Zertifikatsresolver bei Bedarf an deine Umgebung an.
+
+---
+
+## Inhalte & Logik anpassen
+
+- **Fragenkatalog:** In `script.js` im Array `questions`. Jede Frage besitzt `numb`, `question`, `answer` und `options`. Antworten sind Strings; die korrekte Option muss exakt einem Eintrag in `options` entsprechen.
+- **Timer:** Die Konstante `STARTING_TIME` (oben in `script.js`) bestimmt die Sekunden pro Frage.
+- **Punktelogik:** In `showResult()` kannst du die Textbausteine oder die Schwellenwerte (≥ 8 / ≥ 5 Punkte) frei anpassen.
+- **Styling:** Hauptlayout steckt in `style.css`; Schriftdefinitionen und Farbvarianten können dort erweitert werden. Zusätzliche Icons lassen sich über die vorhandene Font-Awesome-Installation einbinden (`Font-Awesome-5.15.4/css/all.css`).
+
+Änderungen werden sofort sichtbar, sobald der Browser die Dateien neu lädt.
+
+---
+
+## Tipps für Erweiterungen
+
+- Fragen per JSON-Datei nachladen und via `fetch` einbinden, falls der Pool größer wird.
+- Fortschrittsanzeige oder Score-Sharing ergänzen (z. B. modaler Dialog mit Share-Links).
+- CI/CD-Pipeline hinzufügen, die das statische Bundle in ein CDN oder einen S3-Bucket synchronisiert.
+
+Viel Spaß beim Weiterentwickeln!
+
