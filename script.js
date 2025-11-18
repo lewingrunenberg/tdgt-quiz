@@ -312,17 +312,46 @@ quit_quiz.onclick = () => {
 
 
 class Handler{
-    constructor() {
-
+    constructor(questions) {
+        this.questions = questions;
+        this.runningGame = false;
+        this.game = null;
     }
+
+    generateSelection() {
+
+    };
+    
+    startGame() {};
+
+    questionAnswered(correctly) {
+            this.game.handleQuestion(correctly);
+    };
+
+    finishGame() {};
+    finishQuiz() {};
+    showResult() {};
+    resetQuiz() {};
 
 
 }
 
 class Game{
-    constructor() {
-
+    constructor(handler, questions) {
+        this.handler = handler
+        this.questions = questions
+        this.nextBtn = document.querySelector("footer .next_btn");
+        this.correctlyAnswered = 0;
+        this.totalQuestions = this.questions.length;
+        this.currQuestion = 0;
     }
+
+    handleQuestion() {};
+    startTimer() {};
+    startTimerLine() {};
+    updateCounter() {};
+    nextQuestion() {};
+
 }
 
 class Question{
@@ -350,7 +379,9 @@ class Question{
             option.classList.add("correct");
             option.insertAdjacentHTML("beforeend", tickIconTag);
             this.handler.questionAnswered(true);
+
         } else {
+
             option.classList.add("incorrect");
             option.insertAdjacentHTML("beforeend", crossIconTag);
             this.optionList.children[this.correct].classList.add("correct");
