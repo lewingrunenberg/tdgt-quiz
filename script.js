@@ -1,116 +1,127 @@
+
 const STARTING_TIME = 60;
 
 const questions = [
-  {
-    numb: 1,
-    question: "Was versteht man unter Künstlicher Intelligenz (KI) im einfachsten Sinne?",
-    answer: "Software, die menschliche Denkprozesse wie Lernen und Problemlösung nachahmt.",
-    options: [
-      "Software, die menschliche Denkprozesse wie Lernen und Problemlösung nachahmt.",
-      "Jede Software, die Daten verarbeitet.",
-      "Ein neuer Name für moderne Roboter.",
-      "Eine besonders schnelle Form des Internets."
-    ]
-  },
-  {
-    numb: 2,
-    question: "In welchem Bereich begegnet uns Künstlicher Intelligenz (KI) im Alltag am häufigsten?",
-    answer: "Bei Empfehlungen für Produkte, Musik oder Filme auf Online-Plattformen.",
-    options: [
-      "Bei Empfehlungen für Produkte, Musik oder Filme auf Online-Plattformen.",
-      "Bei der automatischen Steuerung von Verkehrsampeln in Großstädten.",
-      "In allen Taschenrechnern, die wir verwenden.",
-      "Als automatisches Kassensystem in jedem Supermarkt."
-    ]
-  },
-  {
-    numb: 3,
-    question: "Was ist das Hauptziel der Europäischen KI-Verordnung?",
-    answer: "Ein hohes Maß an Sicherheit und die Einhaltung der Grundrechte beim Einsatz von KI zu gewährleisten.",
-    options: [
-      "Eine spezielle Steuer auf alle KI-basierten Produkte zu erheben.",
-      "Ein hohes Maß an Sicherheit und die Einhaltung der Grundrechte beim Einsatz von KI zu gewährleisten.",
-      "Eine einheitliche Programmiersprache für alle zukünftigen KI-Entwicklungen in Europa festzulegen.",
-      "Sicherzustellen, dass alle KI-Systeme in der EU Open-Source und kostenlos für jedermann zugänglich sind."
-    ]
-  },
-  {
-    numb: 4,
-    question: "Die KI-Verordnung teilt KI-Systeme in verschiedene Risikokategorien ein. Welche Kategorie ist am strengsten reguliert?",
-    answer: "Hochrisiko-KI (High-Risk AI)",
-    options: [
-      "Minimales Risiko",
-      "Geringes Risiko",
-      "KI-Systeme ohne Risiko",
-      "Hochrisiko-KI (High-Risk AI)"
-    ]
-  },
-  {
-    numb: 5,
-    question: "Welche Art von KI-Systemen ist im Rahmen der KI-Verordnung verboten, da sie ein inakzeptables Risiko darstellt?",
-    answer: "KI-Systeme zum 'Social Scoring' durch staatliche Stellen (Bewertung der Vertrauenswürdigkeit von Bürgern).",
-    options: [
-      "Jede Künstlicher Intelligenz, die Bilder oder Texte generieren kann.",
-      "Sämtliche KI-Chatbots, die mit Menschen interagieren.",
-      "Künstlicher Intelligenz, die zur Verbesserung von Produktionsprozessen in Fabriken eingesetzt wird.",
-      "KI-Systeme zum 'Social Scoring' durch staatliche Stellen (Bewertung der Vertrauenswürdigkeit von Bürgern)."
-    ]
-  },
-  {
-    numb: 6,
-    question: "Für wen gilt die Europäische KI-Verordnung in erster Linie?",
-    answer: "Anbieter und Nutzer von KI-Systemen, deren Produkte oder Dienste auf dem EU-Markt verwendet werden, auch wenn sie außerhalb der EU sitzen.",
-    options: [
-      "Nur für kleine und mittlere Unternehmen (KMU) in der EU.",
-      "Nur für staatliche Behörden in den EU-Mitgliedstaaten.",
-      "Anbieter und Nutzer von KI-Systemen, deren Produkte oder Dienste auf dem EU-Markt verwendet werden, auch wenn sie außerhalb der EU sitzen.",
-      "Alle KI-Entwickler weltweit, unabhängig davon, wo ihre Produkte verwendet werden."
-    ]
-  },
-  {
-    numb: 7,
-    question: "Welches der folgenden KI-Anwendungsbeispiele wird von der KI-Verordnung typischerweise als 'Hochrisiko-KI' eingestuft?",
-    answer: "Ein KI-System, das über die Kreditwürdigkeit oder den Zugang zu öffentlichen Leistungen von Personen entscheidet.",
-    options: [
-      "Ein KI-Tool zur Korrektur von Grammatikfehlern in Texten.",
-      "Ein KI-System, das über die Kreditwürdigkeit oder den Zugang zu öffentlichen Leistungen von Personen entscheidet.",
-      "Ein KI-gestütztes Videospiel, das die Schwierigkeit dynamisch anpasst.",
-      "Ein Spam-Filter im E-Mail-Postfach."
-    ]
-  },
-  {
-    numb: 8,
-    question: "Was ändert die KI-Verordnung für den Endverbraucher in seinem Alltag?",
-    answer: "KI-Produkte, die ich kaufe (z. B. in Autos oder medizinischen Geräten), müssen sicherer und transparenter sein.",
-    options: [
-      "Alle KI-Systeme müssen in der EU entwickelt werden.",
-      "Meine Steuererklärung wird ab sofort automatisch von der KI gemacht.",
-      "KI-Produkte, die ich kaufe (z. B. in Autos oder medizinischen Geräten), müssen sicherer und transparenter sein.",
-      "Ich muss jedes Mal um Erlaubnis fragen, wenn ich ein KI-Tool nutze."
-    ]
-  },
-  {
-    numb: 9,
-    question: "Welches der folgenden KI-Systeme hat wahrscheinlich ein minimales Risiko und ist daher kaum reguliert?",
-    answer: "Ein Filter, der die Helligkeit und Farbe in Handyfotos automatisch verbessert.",
-    options: [
-      "Ein Filter, der die Helligkeit und Farbe in Handyfotos automatisch verbessert.",
-      "Ein medizinisches Gerät, das Krankheiten diagnostiziert.",
-      "Ein KI-System, das über die Freilassung von Häftlingen entscheidet.",
-      "Eine Künstlicher Intelligenz zur Auswahl von Jobkandidaten."
-    ]
-  },
-  {
-    numb: 10,
-    question: "Was bedeutet die Einstufung 'Verbotene Praktiken' der KI-Verordnung für diese Anwendungen?",
-    answer: "Diese Anwendungen sind in der EU verboten, da sie die Grundwerte der EU untergraben.",
-    options: [
-      "Sie müssen speziell gekennzeichnet sein.",
-      "Diese Anwendungen sind in der EU verboten, da sie die Grundwerte der EU untergraben.",
-      "Sie dürfen nur in Notfällen verwendet werden.",
-      "Sie müssen von einem EU-Unternehmen entwickelt werden."
-    ]
-  }
+    {
+        "numb": 4,
+        "correct": 0,
+        "question": "Was versteht man unter Künstlicher Intelligenz (KI) im einfachsten Sinne?",
+        "answer": "Software, die menschliche Denkprozesse wie Lernen und Problemlösung nachahmt.",
+        "options": [
+            "Software, die menschliche Denkprozesse wie Lernen und Problemlösung nachahmt.",
+            "Jede Software, die Daten verarbeitet.",
+            "Ein neuer Name für moderne Roboter.",
+            "Eine besonders schnelle Form des Internets."
+        ]
+    },
+    {
+        "numb": 4,
+        "correct": 0,
+        "question": "In welchem Bereich begegnet uns Künstlicher Intelligenz (KI) im Alltag am häufigsten?",
+        "answer": "Bei Empfehlungen für Produkte, Musik oder Filme auf Online-Plattformen.",
+        "options": [
+            "Bei Empfehlungen für Produkte, Musik oder Filme auf Online-Plattformen.",
+            "Bei der automatischen Steuerung von Verkehrsampeln in Großstädten.",
+            "In allen Taschenrechnern, die wir verwenden.",
+            "Als automatisches Kassensystem in jedem Supermarkt."
+        ]
+    },
+    {
+        "numb": 4,
+        "correct": 1,
+        "question": "Was ist das Hauptziel der Europäischen KI-Verordnung?",
+        "answer": "Ein hohes Maß an Sicherheit und die Einhaltung der Grundrechte beim Einsatz von KI zu gewährleisten.",
+        "options": [
+            "Eine spezielle Steuer auf alle KI-basierten Produkte zu erheben.",
+            "Ein hohes Maß an Sicherheit und die Einhaltung der Grundrechte beim Einsatz von KI zu gewährleisten.",
+            "Eine einheitliche Programmiersprache für alle zukünftigen KI-Entwicklungen in Europa festzulegen.",
+            "Sicherzustellen, dass alle KI-Systeme in der EU Open-Source und kostenlos für jedermann zugänglich sind."
+        ]
+    },
+    {
+        "numb": 4,
+        "correct": 3,
+        "question": "Die KI-Verordnung teilt KI-Systeme in verschiedene Risikokategorien ein. Welche Kategorie ist am strengsten reguliert?",
+        "answer": "Hochrisiko-KI (High-Risk AI)",
+        "options": [
+            "Minimales Risiko",
+            "Geringes Risiko",
+            "KI-Systeme ohne Risiko",
+            "Hochrisiko-KI (High-Risk AI)"
+        ]
+    },
+    {
+        "numb": 4,
+        "correct": 3,
+        "question": "Welche Art von KI-Systemen ist im Rahmen der KI-Verordnung verboten, da sie ein inakzeptables Risiko darstellt?",
+        "answer": "KI-Systeme zum 'Social Scoring' durch staatliche Stellen (Bewertung der Vertrauenswürdigkeit von Bürgern).",
+        "options": [
+            "Jede Künstlicher Intelligenz, die Bilder oder Texte generieren kann.",
+            "Sämtliche KI-Chatbots, die mit Menschen interagieren.",
+            "Künstlicher Intelligenz, die zur Verbesserung von Produktionsprozessen in Fabriken eingesetzt wird.",
+            "KI-Systeme zum 'Social Scoring' durch staatliche Stellen (Bewertung der Vertrauenswürdigkeit von Bürgern)."
+        ]
+    },
+    {
+        "numb": 4,
+        "correct": 2,
+        "question": "Für wen gilt die Europäische KI-Verordnung in erster Linie?",
+        "answer": "Anbieter und Nutzer von KI-Systemen, deren Produkte oder Dienste auf dem EU-Markt verwendet werden, auch wenn sie außerhalb der EU sitzen.",
+        "options": [
+            "Nur für kleine und mittlere Unternehmen (KMU) in der EU.",
+            "Nur für staatliche Behörden in den EU-Mitgliedstaaten.",
+            "Anbieter und Nutzer von KI-Systemen, deren Produkte oder Dienste auf dem EU-Markt verwendet werden, auch wenn sie außerhalb der EU sitzen.",
+            "Alle KI-Entwickler weltweit, unabhängig davon, wo ihre Produkte verwendet werden."
+        ]
+    },
+    {
+        "numb": 4,
+        "correct": 1,
+        "question": "Welches der folgenden KI-Anwendungsbeispiele wird von der KI-Verordnung typischerweise als 'Hochrisiko-KI' eingestuft?",
+        "answer": "Ein KI-System, das über die Kreditwürdigkeit oder den Zugang zu öffentlichen Leistungen von Personen entscheidet.",
+        "options": [
+            "Ein KI-Tool zur Korrektur von Grammatikfehlern in Texten.",
+            "Ein KI-System, das über die Kreditwürdigkeit oder den Zugang zu öffentlichen Leistungen von Personen entscheidet.",
+            "Ein KI-gestütztes Videospiel, das die Schwierigkeit dynamisch anpasst.",
+            "Ein Spam-Filter im E-Mail-Postfach."
+        ]
+    },
+    {
+        "numb": 4,
+        "correct": 2,
+        "question": "Was ändert die KI-Verordnung für den Endverbraucher in seinem Alltag?",
+        "answer": "KI-Produkte, die ich kaufe (z. B. in Autos oder medizinischen Geräten), müssen sicherer und transparenter sein.",
+        "options": [
+            "Alle KI-Systeme müssen in der EU entwickelt werden.",
+            "Meine Steuererklärung wird ab sofort automatisch von der KI gemacht.",
+            "KI-Produkte, die ich kaufe (z. B. in Autos oder medizinischen Geräten), müssen sicherer und transparenter sein.",
+            "Ich muss jedes Mal um Erlaubnis fragen, wenn ich ein KI-Tool nutze."
+        ]
+    },
+    {
+        "numb": 4,
+        "correct": 0,
+        "question": "Welches der folgenden KI-Systeme hat wahrscheinlich ein minimales Risiko und ist daher kaum reguliert?",
+        "answer": "Ein Filter, der die Helligkeit und Farbe in Handyfotos automatisch verbessert.",
+        "options": [
+            "Ein Filter, der die Helligkeit und Farbe in Handyfotos automatisch verbessert.",
+            "Ein medizinisches Gerät, das Krankheiten diagnostiziert.",
+            "Ein KI-System, das über die Freilassung von Häftlingen entscheidet.",
+            "Eine Künstlicher Intelligenz zur Auswahl von Jobkandidaten."
+        ]
+    },
+    {
+        "numb": 4,
+        "correct": 1,
+        "question": "Was bedeutet die Einstufung 'Verbotene Praktiken' der KI-Verordnung für diese Anwendungen?",
+        "answer": "Diese Anwendungen sind in der EU verboten, da sie die Grundwerte der EU untergraben.",
+        "options": [
+            "Sie müssen speziell gekennzeichnet sein.",
+            "Diese Anwendungen sind in der EU verboten, da sie die Grundwerte der EU untergraben.",
+            "Sie dürfen nur in Notfällen verwendet werden.",
+            "Sie müssen von einem EU-Unternehmen entwickelt werden."
+        ]
+    }
 ];
 
 const start_btn = document.querySelector(".start_btn button");
@@ -173,6 +184,7 @@ next_btn.onclick = () => {
   }
 };
 
+// Umgesetzt in Klasse Question
 function showQuestion(index) {
   const que_text = document.querySelector(".que_text");
   const question = questions[index];
@@ -297,3 +309,69 @@ restart_quiz.onclick = () => {
 quit_quiz.onclick = () => {
   window.location.reload();
 };
+
+
+class Handler{
+    constructor() {
+
+    }
+
+
+}
+
+class Game{
+    constructor() {
+
+    }
+}
+
+class Question{
+
+    constructor(options, handler) {
+        this.handler = handler;
+
+        this.number = options.numb;
+        this.correct = options.correct;
+        this.question = options.question;
+        this.answer = options.answer;
+        this.options = options.options;
+
+        this.questionElement = document.querySelector(".que_text");
+        this.optionList = document.querySelector(".option_list");
+
+    };
+
+    optionSelected(option){
+        for (let i = 0; i < this.number; i++) {
+            this.optionList.children[i].classList.add("disabled");
+        }
+
+        if (option.textContent.trim() === this.answer) {
+            option.classList.add("correct");
+            option.insertAdjacentHTML("beforeend", tickIconTag);
+            this.handler.questionAnswered(true);
+        } else {
+            option.classList.add("incorrect");
+            option.insertAdjacentHTML("beforeend", crossIconTag);
+            this.optionList.children[this.correct].classList.add("correct");
+            this.optionList.children[this.correct].insertAdjacentHTML("beforeend", tickIconTag);
+            this.handler.questionAnswered(false);
+        }
+    };
+
+    show() {
+        this.questionElement.innerHTML = `<span>${this.question}</span>`;
+        this.optionList.innerHTML = this.options
+            .map(option => `<div class="option"><span>${option}</span></div>`)
+            .join("");
+
+        const option = option_list.querySelectorAll(".option");
+        option.forEach(opt => {
+            opt.addEventListener("onclick", (e) => {
+                this.optionSelected(e.target)
+            })
+
+        });
+    };
+
+}
