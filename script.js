@@ -152,6 +152,7 @@ exit_btn.onclick = () => {
   info_box.classList.remove("activeInfo");
 };
 
+// Implemented in Handler startGame
 continue_btn.onclick = () => {
   info_box.classList.remove("activeInfo");
   quiz_box.classList.add("activeQuiz");
@@ -166,6 +167,7 @@ continue_btn.onclick = () => {
   queCounter(questionIndex + 1);
 };
 
+// Implemented in Game nextQ
 next_btn.onclick = () => {
   if (questionIndex < questions.length - 1) {
     questionIndex++;
@@ -200,6 +202,7 @@ function showQuestion(index) {
 const tickIconTag = '<div class="icon tick"><i class="fas fa-check"></i></div>';
 const crossIconTag = '<div class="icon cross"><i class="fas fa-times"></i></div>';
 
+// Implemented in Game handle Question and Question optionSelected
 function optionSelected(answer) {
   clearInterval(counter);
   clearInterval(counterLine);
@@ -285,6 +288,7 @@ function startTimerLine(time) {
   }, 58);
 }
 
+//Implemented in Game updateCounter
 function queCounter(index) {
   bottom_ques_counter.innerHTML = `<span><p>${index}</p> von <p>${questions.length}</p></span>`;
 }
@@ -314,10 +318,15 @@ quit_quiz.onclick = () => {
 
 
 class Handler{
+
     constructor(questions) {
         this.questions = questions;
-        this.runningGame = false;
         this.game = null;
+
+        this.startBtn = document.querySelector(".start_btn button");
+        this.quizBox = document.querySelector(".quiz_box");
+
+        this.startBtn.onclick(() => this.startGame())
     };
 
     generateSelection(number) {
@@ -342,7 +351,15 @@ class Handler{
         return output;
     };
 
-    startGame() {};
+    startGame() {
+        let gameQuestions = this.generateSelection(5);
+        let infoBox = document.querySelector(".info_box");
+
+        infoBox.classList.remove("activeInfo")
+        this.quizBox.classList.add("activeQuiz");
+        this.game = new Game(this, gameQuestions);
+        this.game.start();
+    };
 
     questionAnswered(correctly) {
             this.game.handleQuestion(correctly);
@@ -351,6 +368,7 @@ class Handler{
     finishGame() {};
     finishQuiz() {};
     showResult() {};
+    showInfo() {};
     resetQuiz() {};
 
 
@@ -461,6 +479,15 @@ class Game{
             this.handler.finishGame();
         }
     };
+
+    start() {
+        this.updateCounter();
+        this.questions[this.currQuestion].show();
+        this.nextBtn.classList.remove("show");
+
+        this.startTimer(60);
+        this.startTimerLine();
+    }
 
 }
 
