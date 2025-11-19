@@ -144,6 +144,7 @@ let counter;
 let counterLine;
 let widthValue = 0;
 
+// Implemented in handler showInfo
 start_btn.onclick = () => {
   info_box.classList.add("activeInfo");
 };
@@ -167,7 +168,7 @@ continue_btn.onclick = () => {
   queCounter(questionIndex + 1);
 };
 
-// Implemented in Game nextQ
+// Implemented in Game nextQuestion
 next_btn.onclick = () => {
   if (questionIndex < questions.length - 1) {
     questionIndex++;
@@ -231,6 +232,7 @@ function optionSelected(answer) {
   next_btn.classList.add("show");
 }
 
+//Implemented in Handler finishGame and showResult
 function showResult() {
   info_box.classList.remove("activeInfo");
   quiz_box.classList.remove("activeQuiz");
@@ -297,6 +299,7 @@ function queCounter(index) {
 const restart_quiz = result_box.querySelector(".buttons .restart");
 const quit_quiz = result_box.querySelector(".buttons .quit");
 
+// Implemented in Handler resetQuiz
 restart_quiz.onclick = () => {
   result_box.classList.remove("activeResult");
   quiz_box.classList.add("activeQuiz");
@@ -312,6 +315,7 @@ restart_quiz.onclick = () => {
   next_btn.classList.remove("show");
 };
 
+// Implemented in Handler finishQuiz
 quit_quiz.onclick = () => {
   window.location.reload();
 };
@@ -319,14 +323,22 @@ quit_quiz.onclick = () => {
 
 class Handler{
 
-    constructor(questions) {
-        this.questions = questions;
+    constructor() {
+        this.questions = this.generateQuestions();
         this.game = null;
+        this.questPerGame = 5;
 
         this.startBtn = document.querySelector(".start_btn button");
         this.quizBox = document.querySelector(".quiz_box");
+        this.infoBox = document.querySelector(".info_box");
+        this.resultBox = document.querySelector(".result_box");
+        this.restartBtn = this.resultBox.querySelector(".buttons .restart");
+        this.quitBtn = this.resultBox.querySelector(".buttons .quit");
 
         this.startBtn.onclick(() => this.startGame())
+        this.quitBtn.onclick(() => this.finishQuiz())
+        this.restartBtn.onclick(() => this.resetQuiz())
+        this.showInfo();
     };
 
     generateSelection(number) {
@@ -352,7 +364,7 @@ class Handler{
     };
 
     startGame() {
-        let gameQuestions = this.generateSelection(5);
+        let gameQuestions = this.generateSelection(this.questPerGame);
         let infoBox = document.querySelector(".info_box");
 
         infoBox.classList.remove("activeInfo")
@@ -365,13 +377,49 @@ class Handler{
             this.game.handleQuestion(correctly);
     };
 
-    finishGame() {};
-    finishQuiz() {};
-    showResult() {};
-    showInfo() {};
-    resetQuiz() {};
+    finishGame() {
+        let score = this.game.getCorrectAnswers();
 
+        this.quizBox.classList.remove("activeQuiz");
+        this.showResult(score);
+    };
 
+    finishQuiz() {
+        this.game = null;
+        window.location.reload();
+    };
+
+    showResult(score) {
+        this.resultBox.classList.add("activeResult");
+        const scoreText = result_box.querySelector(".score_text");
+
+        if (score >= 8) {
+            scoreText.innerHTML = `<span>Glückwunsch! 🎉 Du hast <p>${score}</p> von <p>${this.questPerGame}</p> Punkten erreicht.</span>`;
+        } else if (score >= 5) {
+            scoreText.innerHTML = `<span>Gute Leistung! <p>${score}</p> von <p>${this.questPerGame}</p> Punkten.</span>`;
+        } else {
+            scoreText.innerHTML = `<span>Schade 😐, nur <p>${score}</p> von <p>${this.questPerGame}</p> Punkten.</span>`;
+        }
+    };
+
+    showInfo() {
+        this.infoBox.classList.add("activeInfo");
+    };
+
+    resetQuiz() {
+        this.resultBox.classList.remove("activeResult");
+        this.startGame();
+    };
+
+    generateQuestions() {
+        let output = []
+        for (let i = 0; i < questions.length; i++) {
+            let questOptions = questions[i];
+            let quest = new Question(questOptions, this);
+            output.push(quest);
+        }
+        return output;
+    };
 }
 
 class Game{
@@ -488,6 +536,10 @@ class Game{
         this.startTimer(60);
         this.startTimerLine();
     }
+
+    getCorrectAnswers() {
+        return this.correctlyAnswered;
+    };
 
 }
 
