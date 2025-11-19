@@ -243,6 +243,7 @@ function showResult() {
   }
 }
 
+// Implemented in Game startTimer
 function startTimer(time) {
   clearInterval(counter);
   timeValue = time;
@@ -270,6 +271,7 @@ function startTimer(time) {
   }, 1000);
 }
 
+// Implemented in Game startTimerLine
 function startTimerLine(time) {
   clearInterval(counterLine);
   widthValue = time;
@@ -355,6 +357,8 @@ class Handler{
 }
 
 class Game{
+    counter;
+    counterLine;
     constructor(handler, questions) {
         this.handler = handler
         this.questions = questions
@@ -364,9 +368,61 @@ class Game{
         this.currQuestion = 0;
     };
 
-    handleQuestion() {};
-    startTimer() {};
-    startTimerLine() {};
+    handleQuestion(correctly) {};
+
+    startTimer(time) {
+
+        let timeText = document.querySelector(".timer .time_left_txt");
+        let timeCount = document.querySelector(".timer .timer_sec");
+        let timer = time;
+        let current = this.questions[this.currQuestion]
+        let optionField = current.getOptionList()
+
+        clearInterval(this.counter);
+
+        timeCount.textContent = timer;
+        timeText.textContent = "Zeit";
+
+        this.counter = setInterval(() => {
+            timer--;
+            timeCount.textContent = timer < 10 ? `0${timer}` : timer;
+
+            if (timer < 0) {
+                let correct = optionField.children[current.getCorrect()];
+
+                clearInterval(this.counter);
+                timeCount.textContent = "00";
+                timeText.textContent = "Zeit um";
+
+                for (let i = 0; i < current.getNumber(); i++) {
+                    optionField.children[i].classList.add("disabled");
+                }
+
+                correct.classList.add("correct");
+                correct.insertAdjacentHTML("beforeend", tickIconTag);
+
+                this.nextBtn.classList.add("show");
+            }
+        }, 1000);
+    };
+
+    startTimerLine(time) {
+        clearInterval(this.counterLine);
+        let width = 0;
+        let timeLine = document.querySelector("header .time_line");
+
+        timeLine.style.width = "0px";
+
+        this.counterLine = setInterval(() => {
+            width += 1;
+            timeLine.style.width = `${width}px`;
+
+            if (width > 549) {
+                clearInterval(this.counterLine);
+            }
+        }, 58);
+    };
+
     updateCounter() {};
     nextQuestion() {};
 
@@ -421,6 +477,18 @@ class Question{
             });
 
         });
+    };
+
+    getOptionList() {
+        return this.optionList;
+    };
+
+    getNumber() {
+        return this.number;
+    };
+
+    getCorrect() {
+        return this.correct;
     };
 
 }
