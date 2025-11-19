@@ -1,5 +1,5 @@
 
-const STARTING_TIME = 60;
+//const STARTING_TIME = 60;
 
 const questions = [
     {
@@ -124,6 +124,7 @@ const questions = [
     }
 ];
 
+/*
 const start_btn = document.querySelector(".start_btn button");
 const info_box = document.querySelector(".info_box");
 const exit_btn = info_box.querySelector(".buttons .quit");
@@ -319,7 +320,7 @@ restart_quiz.onclick = () => {
 quit_quiz.onclick = () => {
   window.location.reload();
 };
-
+*/
 
 class Handler{
 
@@ -328,17 +329,17 @@ class Handler{
         this.game = null;
         this.questPerGame = 5;
 
-        this.startBtn = document.querySelector(".start_btn button");
-        this.quizBox = document.querySelector(".quiz_box");
         this.infoBox = document.querySelector(".info_box");
+        this.startBtn = this.infoBox.querySelector(".restart .buttons"); //TODO: findet den button nicht, kp warum
+        console.log(this.startBtn)
+        this.quizBox = document.querySelector(".quiz_box");
+
         this.resultBox = document.querySelector(".result_box");
         this.restartBtn = this.resultBox.querySelector(".buttons .restart");
         this.quitBtn = this.resultBox.querySelector(".buttons .quit");
 
-        this.startBtn.onclick(() => this.startGame())
-        this.quitBtn.onclick(() => this.finishQuiz())
-        this.restartBtn.onclick(() => this.resetQuiz())
-        this.showInfo();
+        this.setEvents();
+        console.log("Test")
     };
 
     generateSelection(number) {
@@ -371,6 +372,7 @@ class Handler{
         this.quizBox.classList.add("activeQuiz");
         this.game = new Game(this, gameQuestions);
         this.game.start();
+        console.log("startGame")
     };
 
     questionAnswered(correctly) {
@@ -404,6 +406,7 @@ class Handler{
 
     showInfo() {
         this.infoBox.classList.add("activeInfo");
+        console.log("showInfo");
     };
 
     resetQuiz() {
@@ -419,6 +422,12 @@ class Handler{
             output.push(quest);
         }
         return output;
+    };
+
+    setEvents() {
+        this.startBtn.onclick = () => this.startGame();
+        this.quitBtn.onclick = () => this.finishQuiz();
+        this.restartBtn.onclick = () => this.resetQuiz();
     };
 }
 
@@ -556,7 +565,6 @@ class Question{
 
         this.questionElement = document.querySelector(".que_text");
         this.optionList = document.querySelector(".option_list");
-
     };
 
     optionSelected(option){
@@ -607,3 +615,9 @@ class Question{
     };
 
 }
+
+let handler = new Handler();
+
+let initButton = document.querySelector(".start_btn button");
+console.log(initButton)
+initButton.onclick = () => handler.showInfo();
