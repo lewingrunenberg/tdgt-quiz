@@ -366,9 +366,26 @@ class Game{
         this.correctlyAnswered = 0;
         this.totalQuestions = this.questions.length;
         this.currQuestion = 0;
+
+        this.nextBtn.onclick(() => this.nextQuestion())
     };
 
-    handleQuestion(correctly) {};
+    handleQuestion(correctly) {
+
+        clearInterval(this.counter);
+        clearInterval(this.counterLine);
+
+        if (correctly) {
+            this.correctlyAnswered++;
+        }
+
+        if (this.currQuestion >= this.totalQuestions - 1) {
+            this.nextBtn.textContent = "Fertig";
+        }
+
+        this.nextBtn.classList.add("show");
+
+    };
 
     startTimer(time) {
 
@@ -406,7 +423,7 @@ class Game{
         }, 1000);
     };
 
-    startTimerLine(time) {
+    startTimerLine() {
         clearInterval(this.counterLine);
         let width = 0;
         let timeLine = document.querySelector("header .time_line");
@@ -423,8 +440,27 @@ class Game{
         }, 58);
     };
 
-    updateCounter() {};
-    nextQuestion() {};
+    updateCounter() {
+        let questionCounter =  document.querySelector("footer .total_que");
+        questionCounter.innerHTML = `<span><p>${this.currQuestion + 1}</p> von <p>${this.questions.length}</p></span>`;
+    };
+
+    nextQuestion() {
+
+        if (this.currQuestion >= this.totalQuestions - 1) {
+            this.currQuestion++;
+
+            this.nextBtn.classList.remove("show");
+
+            this.updateCounter();
+            this.questions[this.currQuestion].show();
+
+            this.startTimer(60);
+            this.startTimerLine();
+        } else {
+            this.handler.finishGame();
+        }
+    };
 
 }
 
