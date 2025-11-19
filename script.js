@@ -316,12 +316,30 @@ class Handler{
         this.questions = questions;
         this.runningGame = false;
         this.game = null;
-    }
-
-    generateSelection() {
-
     };
-    
+
+    generateSelection(number) {
+        let selection = [];
+        let max = this.questions.length;
+        let output = [];
+
+        for (let i = 0; i < number; i++) {
+            let n = Math.floor(Math.random() * max);
+
+            if (!selection.includes(n)) {
+                selection.push(n);
+            } else {
+                i--;
+            }
+        }
+
+        selection.forEach(index => {
+            output.push(this.questions[index]);
+        });
+
+        return output;
+    };
+
     startGame() {};
 
     questionAnswered(correctly) {
@@ -344,7 +362,7 @@ class Game{
         this.correctlyAnswered = 0;
         this.totalQuestions = this.questions.length;
         this.currQuestion = 0;
-    }
+    };
 
     handleQuestion() {};
     startTimer() {};
@@ -399,8 +417,8 @@ class Question{
         const option = option_list.querySelectorAll(".option");
         option.forEach(opt => {
             opt.addEventListener("onclick", (e) => {
-                this.optionSelected(e.target)
-            })
+                this.optionSelected(e.target);
+            });
 
         });
     };
