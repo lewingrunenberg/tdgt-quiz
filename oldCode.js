@@ -1,3 +1,4 @@
+const STARTING_TIME = 60;
 
 const questions = [
     {
