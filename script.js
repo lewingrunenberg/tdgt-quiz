@@ -125,7 +125,9 @@ const questions = [
 const tickIconTag = '<div class="icon tick"><i class="fas fa-check"></i></div>';
 const crossIconTag = '<div class="icon cross"><i class="fas fa-times"></i></div>';
 
-
+/**
+ * Handler der alles initialisiert und verwaltet
+ */
 class Handler{
 
     constructor() {
@@ -144,15 +146,20 @@ class Handler{
 
         this.exitBtn.onclick = () => this.infoBox.classList.remove("activeInfo");
         this.setEvents();
-        console.log("Test")
     };
 
+    /**
+     * Zufalls Generator für die Fragen
+     * @param {number}number Anzahl der Fragen im Spiel
+     * @returns {*[]}
+     */
     generateSelection(number) {
         let selection = [];
         let max = this.questions.length;
         let output = [];
 
         for (let i = 0; i < number; i++) {
+            // Generiere zufällige Zahl im Bereich 0, Max; Math.random() gibt zahl zwischen 0 und 1 aus
             let n = Math.floor(Math.random() * max);
 
             if (!selection.includes(n)) {
@@ -169,6 +176,9 @@ class Handler{
         return output;
     };
 
+    /**
+     * Erstellt Game Instanz und ruft game.start() auf
+     */
     startGame() {
         let gameQuestions = this.generateSelection(this.questPerGame);
         let infoBox = document.querySelector(".info_box");
@@ -177,13 +187,21 @@ class Handler{
         this.quizBox.classList.add("activeQuiz");
         this.game = new Game(this, gameQuestions);
         this.game.start();
-        console.log("startGame")
     };
 
+    /**
+     * Mediator Funktion zum Weiterleiten zu Game Instanz
+     * @param {boolean}correctly
+     */
     questionAnswered(correctly) {
             this.game.handleQuestion(correctly);
     };
 
+    /**
+     * Quizbox schließen
+     *
+     * ruft showResult auf
+     */
     finishGame() {
         let score = this.game.getCorrectAnswers();
 
@@ -191,12 +209,21 @@ class Handler{
         this.showResult(score);
     };
 
+    /**
+     * Close quiz and reload window
+     */
     finishQuiz() {
         this.game = null;
         window.location.reload();
     };
 
+    /**
+     * Funktion zum anzeigen des Result Screens
+     * @param {number} score
+     */
     showResult(score) {
+        //TODO: Score überarbeiten. Ursprüngliches mit 10 Punkten ist vlt nicht so gut
+
         this.resultBox.classList.add("activeResult");
         const scoreText = this.resultBox.querySelector(".score_text");
 
@@ -209,20 +236,33 @@ class Handler{
         }
     };
 
+    /**
+     * onclick Funktion zum anzeigen der Informationen
+     */
     showInfo() {
         this.infoBox.classList.add("activeInfo");
-        console.log("showInfo");
     };
 
+    /**
+     * onclick Funktion um das Quiz neu zu starten
+     */
     resetQuiz() {
         this.resultBox.classList.remove("activeResult");
+
+        // Setze den nextBtn zurück
         let nxtBtn = this.game.getNextBtn();
         nxtBtn.textContent = "Nächste Frage";
         this.startGame();
     };
 
+    /**
+     * Erstellt die Fragen objekte
+     * @returns {*[]}
+     */
     generateQuestions() {
-        let output = []
+        let output = [];
+
+        //gehe Questions Json durch und erstelle für jeden Eintrag ein Question Objekt
         for (let i = 0; i < questions.length; i++) {
             let questOptions = questions[i];
             let quest = new Question(questOptions, this);
@@ -231,6 +271,9 @@ class Handler{
         return output;
     };
 
+    /**
+     * Helper Funktion zum verteilen der onclick Funktionen
+     */
     setEvents() {
         this.startBtn.onclick = () => this.startGame();
         this.quitBtn.onclick = () => this.finishQuiz();
@@ -238,12 +281,18 @@ class Handler{
     };
 }
 
+
+/**
+ * Quiz Instanz
+ *
+ * Kümmert sich um die Funktionen während ein Quiz läuft
+ */
 class Game{
     counter;
     counterLine;
     constructor(handler, questions) {
-        this.handler = handler
-        this.questions = questions
+        this.handler = handler;
+        this.questions = questions;
         this.nextBtn = document.querySelector("footer .next_btn");
         this.correctlyAnswered = 0;
         this.totalQuestions = this.questions.length;
@@ -252,15 +301,25 @@ class Game{
         this.nextBtn.onclick = () => this.nextQuestion();
     };
 
+    /**
+     * Mediator Funktion
+     *
+     * Wird aufgerufen, wenn eine Frage beantwortet wird
+     *
+     * Zählt correctlyAnswered hoch und blendet nextBtn ein
+     * @param {boolean} correctly True falls Frage korrekt beantwortet
+     */
     handleQuestion(correctly) {
 
         clearInterval(this.counter);
         clearInterval(this.counterLine);
 
+        // Falls Frage korrekt, zähle this.correctlyAnswered hoch
         if (correctly) {
             this.correctlyAnswered++;
         }
 
+        // Falls letzte Frage: ändere Text zu "Fertig" um
         if (this.currQuestion >= this.totalQuestions - 1) {
             this.nextBtn.textContent = "Fertig";
         }
@@ -269,34 +328,41 @@ class Game{
 
     };
 
+    /**
+     * Startet und aktualisiert den Timer in der oberen rechten Ecke
+     * @param {number} time Zeit zum beantworten der Fragen
+     */
     startTimer(time) {
 
         let timeText = document.querySelector(".timer .time_left_txt");
         let timeCount = document.querySelector(".timer .timer_sec");
         let timer = time;
-        let current = this.questions[this.currQuestion]
-        let optionField = current.getOptionList()
+        let current = this.questions[this.currQuestion];
+        let optionField = current.getOptionList();
 
-        clearInterval(this.counter);
-
-        timeCount.textContent = timer;
+        timeCount.textContent = String(timer);
         timeText.textContent = "Zeit";
 
+        // Aktualisiere den Timer
         this.counter = setInterval(() => {
             timer--;
             timeCount.textContent = timer < 10 ? `0${timer}` : timer;
 
+            // wenn Timer abgelaufen ist
             if (timer < 0) {
                 let correct = optionField.children[current.getCorrect()];
 
+                // stoppe Timer
                 clearInterval(this.counter);
                 timeCount.textContent = "00";
                 timeText.textContent = "Zeit um";
 
+                // setze Elemente auf disabled
                 for (let i = 0; i < current.getNumber(); i++) {
                     optionField.children[i].classList.add("disabled");
                 }
 
+                //richtiges Ergebnis einblenden
                 correct.classList.add("correct");
                 correct.insertAdjacentHTML("beforeend", tickIconTag);
 
@@ -305,13 +371,19 @@ class Game{
         }, 1000);
     };
 
+    /**
+     * Startet die Timer Linie unter dem Titel
+     */
     startTimerLine() {
-        clearInterval(this.counterLine);
+        //TODO: Linie gleich mit Zeit laufen lassen: Linie hört nach 28/29 Sekunden auf
+
+        // Momentane Breite der Anzeige Linie
         let width = 0;
         let timeLine = document.querySelector("header .time_line");
 
         timeLine.style.width = "0px";
 
+        // Aktualisieren der Linie
         this.counterLine = setInterval(() => {
             width += 1;
             timeLine.style.width = `${width}px`;
@@ -322,28 +394,47 @@ class Game{
         }, 58);
     };
 
+    /**
+     * Funktion um den Rundenstand unten Links zu aktualisieren
+     */
     updateCounter() {
         let questionCounter =  document.querySelector("footer .total_que");
         questionCounter.innerHTML = `<span><p>${this.currQuestion + 1}</p> von <p>${this.questions.length}</p></span>`;
     };
 
+    /**
+     * Funktion zum anzeigen der nächsten Fragen
+     *
+     * ruft handler.finishGame auf wenn letzte Frage beantwortet wurde
+     */
     nextQuestion() {
 
-        if (this.currQuestion < this.totalQuestions - 1) {
-            this.currQuestion++;
+        // "Nächste Frage" Knopf ausblenden
+        this.nextBtn.classList.remove("show");
 
-            this.nextBtn.classList.remove("show");
+        // Checke ob Frage letzte Frage ist
+        if (this.currQuestion < this.totalQuestions - 1) {
+
+            this.currQuestion++;
 
             this.updateCounter();
             this.questions[this.currQuestion].show();
 
             this.startTimer(60);
             this.startTimerLine();
+
         } else {
+
+            // Beende Quiz
             this.handler.finishGame();
         }
     };
 
+    /**
+     *Funktion zum anzeigen der ersten Frage
+     *
+     * Syntax ähnlich wie bei nextQuestion
+     */
     start() {
         this.updateCounter();
         this.questions[this.currQuestion].show();
@@ -353,21 +444,31 @@ class Game{
         this.startTimerLine();
     }
 
+    /**getter Funktion für this.correctlyAnswered*/
     getCorrectAnswers() {
         return this.correctlyAnswered;
     };
 
+    /**getter Funktion für this.nextBtn*/
     getNextBtn() {
         return this.nextBtn;
     };
-
 }
 
+
+/**
+ * Fragen Klasse
+ *
+ * Enthält Funktionalität zum anzeigen von Fragen sowie für das Auswählen dieser
+ *
+ * Fragen werden vom Handler erstellt
+ * */
 class Question{
 
     constructor(options, handler) {
         this.handler = handler;
 
+        // options ist die Json mit den Fragen
         this.number = options.numb;
         this.correct = options.correct;
         this.question = options.question;
@@ -378,24 +479,33 @@ class Question{
         this.optionList = document.querySelector(".option_list");
     };
 
+    /**
+     *onclick Funktion der Auswahloptionen
+     *
+     * setzt die Elemente von optionList auf disabled und gibt der Richtigen antwort und ggf. der falschen
+     * die dazugehörigen Klassen
+     *
+     * ruft die Mediator-Funktion handler.questionAnswered auf
+     */
     optionSelected(option){
-        console.log(option.nodeName)
 
+        // fängt Problem von this.show() ab
         if (option.nodeName === "SPAN") {
-            option = option.parentElement
+            option = option.parentElement;
         }
-        console.log(option.nodeName)
+
+        // Setze Elemente auf disabled
         for (let i = 0; i < this.number; i++) {
             this.optionList.children[i].classList.add("disabled");
         }
 
+        // kontrolliere Antwort und vergebe Klassen
         if (option.textContent.trim() === this.answer) {
             this.optionList.children[this.correct].classList.add("correct");
             option.insertAdjacentHTML("beforeend", tickIconTag);
             this.handler.questionAnswered(true);
 
         } else {
-            console.log(option.parentElement)
             option.classList.add("incorrect");
             option.insertAdjacentHTML("beforeend", crossIconTag);
             this.optionList.children[this.correct].classList.add("correct");
@@ -404,6 +514,13 @@ class Question{
         }
     };
 
+    /**
+    * Funktion zum anzeigen der Frage Optionen
+     *
+    * setzt ebenfalls die onClick Eventfunktion
+     *
+    * WICHTIG!!!: das onclick hier kann aus irgendwelchen gründen das Child element zurück geben, kp wieso
+    * */
     show() {
         this.questionElement.innerHTML = `<span>${this.question}</span>`;
         this.optionList.innerHTML = this.options
@@ -411,29 +528,29 @@ class Question{
             .join("");
 
         const option = this.optionList.querySelectorAll(".option");
-        console.log(option)
         option.forEach(opt => {
             opt.onclick = (e) => this.optionSelected(e.target);
-
             });
     };
 
+    /**getter Funktion für this.optionList*/
     getOptionList() {
         return this.optionList;
     };
 
+    /**getter Funktion für this.number*/
     getNumber() {
         return this.number;
     };
 
+    /**getter Funktion für this.correct*/
     getCorrect() {
         return this.correct;
     };
-
 }
+
 
 let handler = new Handler();
 
 let initButton = document.querySelector(".start_btn button");
-console.log(initButton)
 initButton.onclick = () => handler.showInfo();
