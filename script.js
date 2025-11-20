@@ -1,6 +1,4 @@
 
-//const STARTING_TIME = 60;
-
 const questions = [
     {
         "numb": 4,
@@ -124,203 +122,9 @@ const questions = [
     }
 ];
 
-/*
-const start_btn = document.querySelector(".start_btn button");
-const info_box = document.querySelector(".info_box");
-const exit_btn = info_box.querySelector(".buttons .quit");
-const continue_btn = info_box.querySelector(".buttons .restart");
-const quiz_box = document.querySelector(".quiz_box");
-const result_box = document.querySelector(".result_box");
-const option_list = document.querySelector(".option_list");
-const time_line = document.querySelector("header .time_line");
-const timeText = document.querySelector(".timer .time_left_txt");
-const timeCount = document.querySelector(".timer .timer_sec");
-const next_btn = document.querySelector("footer .next_btn");
-const bottom_ques_counter = document.querySelector("footer .total_que");
-
-let timeValue = STARTING_TIME;
-let questionIndex = 0;
-let userScore = 0;
-let counter;
-let counterLine;
-let widthValue = 0;
-
-// Implemented in handler showInfo
-start_btn.onclick = () => {
-  info_box.classList.add("activeInfo");
-};
-
-exit_btn.onclick = () => {
-  info_box.classList.remove("activeInfo");
-};
-
-// Implemented in Handler startGame
-continue_btn.onclick = () => {
-  info_box.classList.remove("activeInfo");
-  quiz_box.classList.add("activeQuiz");
-  questionIndex = 0;
-  userScore = 0;
-  showQuestion(questionIndex);
-  clearInterval(counter);
-  clearInterval(counterLine);
-  timeText.textContent = "Zeit";
-  startTimer(STARTING_TIME);
-  startTimerLine(0);
-  queCounter(questionIndex + 1);
-};
-//TODO: hier fehlt noch logik von
-// Implemented in Game nextQuestion
-next_btn.onclick = () => {
-  if (questionIndex < questions.length - 1) {
-    questionIndex++;
-    showQuestion(questionIndex);
-    queCounter(questionIndex + 1);
-    clearInterval(counter);
-    clearInterval(counterLine);
-    startTimer(STARTING_TIME);
-    startTimerLine(0);
-    timeText.textContent = "Zeit";
-    next_btn.classList.remove("show");
-  } else {
-    clearInterval(counter);
-    clearInterval(counterLine);
-    showResult();
-  }
-};
-
-// Umgesetzt in Klasse Question
-function showQuestion(index) {
-  const que_text = document.querySelector(".que_text");
-  const question = questions[index];
-  que_text.innerHTML = `<span>${question.question}</span>`;
-  option_list.innerHTML = question.options
-    .map(option => `<div class="option"><span>${option}</span></div>`)
-    .join("");
-
-  const option = option_list.querySelectorAll(".option");
-  option.forEach(opt => opt.setAttribute("onclick", "optionSelected(this)"));
-}
-*/
 const tickIconTag = '<div class="icon tick"><i class="fas fa-check"></i></div>';
 const crossIconTag = '<div class="icon cross"><i class="fas fa-times"></i></div>';
-/*
-// Implemented in Game handle Question and Question optionSelected
-function optionSelected(answer) {TODO: not working
-  clearInterval(counter);
-  clearInterval(counterLine);
-  const userAns = answer.textContent.trim();
-  const correctAns = questions[questionIndex].answer;
-  const allOptions = option_list.children.length;
 
-  if (userAns === correctAns) {
-    userScore += 1;
-    answer.classList.add("correct");
-    answer.insertAdjacentHTML("beforeend", tickIconTag);
-  } else {
-    answer.classList.add("incorrect");
-    answer.insertAdjacentHTML("beforeend", crossIconTag);
-    for (let i = 0; i < allOptions; i++) {
-      if (option_list.children[i].textContent.trim() === correctAns) {
-        option_list.children[i].classList.add("correct");
-        option_list.children[i].insertAdjacentHTML("beforeend", tickIconTag);
-      }
-    }
-  }
-
-  for (let i = 0; i < allOptions; i++) {
-    option_list.children[i].classList.add("disabled");
-  }
-  next_btn.classList.add("show");
-}
-
-//Implemented in Handler finishGame and showResult
-function showResult() {
-  info_box.classList.remove("activeInfo");
-  quiz_box.classList.remove("activeQuiz");
-  result_box.classList.add("activeResult");
-  const scoreText = result_box.querySelector(".score_text");
-
-  if (userScore >= 8) {
-    scoreText.innerHTML = `<span>Glückwunsch! 🎉 Du hast <p>${userScore}</p> von <p>${questions.length}</p> Punkten erreicht.</span>`;
-  } else if (userScore >= 5) {
-    scoreText.innerHTML = `<span>Gute Leistung! <p>${userScore}</p> von <p>${questions.length}</p> Punkten.</span>`;
-  } else {
-    scoreText.innerHTML = `<span>Schade 😐, nur <p>${userScore}</p> von <p>${questions.length}</p> Punkten.</span>`;
-  }
-}
-
-// Implemented in Game startTimer
-function startTimer(time) {
-  clearInterval(counter);
-  timeValue = time;
-  timeCount.textContent = timeValue;
-  timeText.textContent = "Zeit";
-  counter = setInterval(() => {
-    timeValue--;
-    timeCount.textContent = timeValue < 10 ? `0${timeValue}` : timeValue;
-
-    if (timeValue < 0) {
-      clearInterval(counter);
-      timeCount.textContent = "00";
-      timeText.textContent = "Zeit um";
-      const correctAns = questions[questionIndex].answer;
-      const allOptions = option_list.children.length;
-      for (let i = 0; i < allOptions; i++) {
-        if (option_list.children[i].textContent.trim() === correctAns) {
-          option_list.children[i].classList.add("correct");
-          option_list.children[i].insertAdjacentHTML("beforeend", tickIconTag);
-        }
-        option_list.children[i].classList.add("disabled");
-      }
-      next_btn.classList.add("show");
-    }
-  }, 1000);
-}
-
-// Implemented in Game startTimerLine
-function startTimerLine(time) {
-  clearInterval(counterLine);
-  widthValue = time;
-  time_line.style.width = `${widthValue}px`;
-  counterLine = setInterval(() => {
-    widthValue += 1;
-    time_line.style.width = `${widthValue}px`;
-    if (widthValue > 549) {
-      clearInterval(counterLine);
-    }
-  }, 58);
-}
-
-//Implemented in Game updateCounter
-function queCounter(index) {
-  bottom_ques_counter.innerHTML = `<span><p>${index}</p> von <p>${questions.length}</p></span>`;
-}
-
-// Restart handling
-const restart_quiz = result_box.querySelector(".buttons .restart");
-const quit_quiz = result_box.querySelector(".buttons .quit");
-
-// Implemented in Handler resetQuiz
-restart_quiz.onclick = () => {
-  result_box.classList.remove("activeResult");
-  quiz_box.classList.add("activeQuiz");
-  questionIndex = 0;
-  userScore = 0;
-  clearInterval(counter);
-  clearInterval(counterLine);
-  startTimer(STARTING_TIME);
-  startTimerLine(0);
-  showQuestion(questionIndex);
-  queCounter(questionIndex + 1);
-  timeText.textContent = "Zeit";
-  next_btn.classList.remove("show");
-};
-
-// Implemented in Handler finishQuiz
-quit_quiz.onclick = () => {
-  window.location.reload();
-};
-*/
 
 class Handler{
 
@@ -331,12 +135,14 @@ class Handler{
 
         this.infoBox = document.querySelector(".info_box");
         this.startBtn = this.infoBox.querySelector(".buttons .restart");
+        this.exitBtn = this.infoBox.querySelector(".buttons .quit");
         this.quizBox = document.querySelector(".quiz_box");
 
         this.resultBox = document.querySelector(".result_box");
         this.restartBtn = this.resultBox.querySelector(".buttons .restart");
         this.quitBtn = this.resultBox.querySelector(".buttons .quit");
 
+        this.exitBtn.onclick = () => this.infoBox.classList.remove("activeInfo");
         this.setEvents();
         console.log("Test")
     };
@@ -392,11 +198,11 @@ class Handler{
 
     showResult(score) {
         this.resultBox.classList.add("activeResult");
-        const scoreText = result_box.querySelector(".score_text");
+        const scoreText = this.resultBox.querySelector(".score_text");
 
-        if (score >= 8) {
+        if (score >= 4) {
             scoreText.innerHTML = `<span>Glückwunsch! 🎉 Du hast <p>${score}</p> von <p>${this.questPerGame}</p> Punkten erreicht.</span>`;
-        } else if (score >= 5) {
+        } else if (score >= 3) {
             scoreText.innerHTML = `<span>Gute Leistung! <p>${score}</p> von <p>${this.questPerGame}</p> Punkten.</span>`;
         } else {
             scoreText.innerHTML = `<span>Schade 😐, nur <p>${score}</p> von <p>${this.questPerGame}</p> Punkten.</span>`;
@@ -410,6 +216,8 @@ class Handler{
 
     resetQuiz() {
         this.resultBox.classList.remove("activeResult");
+        let nxtBtn = this.game.getNextBtn();
+        nxtBtn.textContent = "Nächste Frage";
         this.startGame();
     };
 
@@ -521,7 +329,7 @@ class Game{
 
     nextQuestion() {
 
-        if (this.currQuestion >= this.totalQuestions - 1) {
+        if (this.currQuestion < this.totalQuestions - 1) {
             this.currQuestion++;
 
             this.nextBtn.classList.remove("show");
@@ -549,6 +357,10 @@ class Game{
         return this.correctlyAnswered;
     };
 
+    getNextBtn() {
+        return this.nextBtn;
+    };
+
 }
 
 class Question{
@@ -568,7 +380,7 @@ class Question{
 
     optionSelected(option){
         console.log(option.nodeName)
-        
+
         if (option.nodeName === "SPAN") {
             option = option.parentElement
         }
