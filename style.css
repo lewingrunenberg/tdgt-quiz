@@ -451,4 +451,10 @@ footer button.show{
     .result_box .buttons button{
         width: 100%;
     }
+
+    img {
+        width: fit-content;
+        max-width: 500px;
+        max-height: 100%;
+    }
 }

@@ -119,6 +119,15 @@ const questions = [
             "Sie dürfen nur in Notfällen verwendet werden.",
             "Sie müssen von einem EU-Unternehmen entwickelt werden."
         ]
+    },
+    {
+
+        "image": true,
+        "numb": 2,
+        "correct": 1,
+        "question": "Welches dieser Bilder ist KI generiert?",
+        "options": ["quizImages/quest1-real.png", "quizImages/quest1-fake.png"]
+
     }
 ];
 
@@ -265,9 +274,16 @@ class Handler{
         //gehe Questions Json durch und erstelle für jeden Eintrag ein Question Objekt
         for (let i = 0; i < questions.length; i++) {
             let questOptions = questions[i];
-            let quest = new Question(questOptions, this);
-            output.push(quest);
+            if (questOptions.numb === 2) {
+                let quest = new ImageQuestion(questOptions, this);
+                output.push(quest);
+            } else {
+                let quest = new Question(questOptions, this);
+                output.push(quest);
+            }
+
         }
+        console.log(output)
         return output;
     };
 
@@ -469,7 +485,7 @@ class Question{
         this.handler = handler;
 
         // options ist die Json mit den Fragen
-        this.number = options.numb;
+        this.number = options.numb | null;
         this.correct = options.correct;
         this.question = options.question;
         this.answer = options.answer;
@@ -547,6 +563,47 @@ class Question{
     getCorrect() {
         return this.correct;
     };
+}
+
+
+class ImageQuestion extends Question {
+
+    constructor(options, handler) {
+        super(options, handler);
+    };
+
+    show() {
+
+        //TODO: correctly size image; add red/green border for false/correct answer
+        this.questionElement.innerHTML = `<span>${this.question}</span>`;
+        this.optionList.innerHTML = this.options
+            .map(option => `<div class="imageOption"><img src=${option} alt="fehler"></div>`)
+            .join("");
+
+        const option = this.optionList.querySelectorAll(".imageOption");
+        option.forEach(opt => {
+            opt.onclick = (e) => this.optionSelected(e.target);
+        });
+    }
+
+    optionSelected(option) {
+
+
+        let correct = this.optionList.children[this.correct];
+
+        // Setze Elemente auf disabled
+        for (let i = 0; i < this.number; i++) {
+            this.optionList.children[i].classList.add("disabled");
+        }
+
+        if (option.isEqualNode(correct)) {
+            option.style.backgroundColor = "red";
+            this.handler.questionAnswered(true);
+        } else {
+            this.handler.questionAnswered(false);
+        }
+
+    }
 }
 
 
