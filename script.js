@@ -168,7 +168,7 @@ continue_btn.onclick = () => {
   startTimerLine(0);
   queCounter(questionIndex + 1);
 };
-
+//TODO: hier fehlt noch logik von
 // Implemented in Game nextQuestion
 next_btn.onclick = () => {
   if (questionIndex < questions.length - 1) {
@@ -200,12 +200,12 @@ function showQuestion(index) {
   const option = option_list.querySelectorAll(".option");
   option.forEach(opt => opt.setAttribute("onclick", "optionSelected(this)"));
 }
-
+*/
 const tickIconTag = '<div class="icon tick"><i class="fas fa-check"></i></div>';
 const crossIconTag = '<div class="icon cross"><i class="fas fa-times"></i></div>';
-
+/*
 // Implemented in Game handle Question and Question optionSelected
-function optionSelected(answer) {
+function optionSelected(answer) {TODO: not working
   clearInterval(counter);
   clearInterval(counterLine);
   const userAns = answer.textContent.trim();
@@ -330,8 +330,7 @@ class Handler{
         this.questPerGame = 5;
 
         this.infoBox = document.querySelector(".info_box");
-        this.startBtn = this.infoBox.querySelector(".restart .buttons"); //TODO: findet den button nicht, kp warum
-        console.log(this.startBtn)
+        this.startBtn = this.infoBox.querySelector(".buttons .restart");
         this.quizBox = document.querySelector(".quiz_box");
 
         this.resultBox = document.querySelector(".result_box");
@@ -442,7 +441,7 @@ class Game{
         this.totalQuestions = this.questions.length;
         this.currQuestion = 0;
 
-        this.nextBtn.onclick(() => this.nextQuestion())
+        this.nextBtn.onclick = () => this.nextQuestion();
     };
 
     handleQuestion(correctly) {
@@ -568,17 +567,23 @@ class Question{
     };
 
     optionSelected(option){
+        console.log(option.nodeName)
+        
+        if (option.nodeName === "SPAN") {
+            option = option.parentElement
+        }
+        console.log(option.nodeName)
         for (let i = 0; i < this.number; i++) {
             this.optionList.children[i].classList.add("disabled");
         }
 
         if (option.textContent.trim() === this.answer) {
-            option.classList.add("correct");
+            this.optionList.children[this.correct].classList.add("correct");
             option.insertAdjacentHTML("beforeend", tickIconTag);
             this.handler.questionAnswered(true);
 
         } else {
-
+            console.log(option.parentElement)
             option.classList.add("incorrect");
             option.insertAdjacentHTML("beforeend", crossIconTag);
             this.optionList.children[this.correct].classList.add("correct");
@@ -593,13 +598,12 @@ class Question{
             .map(option => `<div class="option"><span>${option}</span></div>`)
             .join("");
 
-        const option = option_list.querySelectorAll(".option");
+        const option = this.optionList.querySelectorAll(".option");
+        console.log(option)
         option.forEach(opt => {
-            opt.addEventListener("onclick", (e) => {
-                this.optionSelected(e.target);
-            });
+            opt.onclick = (e) => this.optionSelected(e.target);
 
-        });
+            });
     };
 
     getOptionList() {
