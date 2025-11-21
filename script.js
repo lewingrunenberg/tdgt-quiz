@@ -1,6 +1,7 @@
 
 const questions = [
     {
+        "image": false,
         "numb": 4,
         "correct": 0,
         "question": "Was versteht man unter Künstlicher Intelligenz (KI) im einfachsten Sinne?",
@@ -13,6 +14,7 @@ const questions = [
         ]
     },
     {
+        "image": false,
         "numb": 4,
         "correct": 0,
         "question": "In welchem Bereich begegnet uns Künstlicher Intelligenz (KI) im Alltag am häufigsten?",
@@ -25,6 +27,7 @@ const questions = [
         ]
     },
     {
+        "image": false,
         "numb": 4,
         "correct": 1,
         "question": "Was ist das Hauptziel der Europäischen KI-Verordnung?",
@@ -37,6 +40,7 @@ const questions = [
         ]
     },
     {
+        "image": false,
         "numb": 4,
         "correct": 3,
         "question": "Die KI-Verordnung teilt KI-Systeme in verschiedene Risikokategorien ein. Welche Kategorie ist am strengsten reguliert?",
@@ -49,6 +53,7 @@ const questions = [
         ]
     },
     {
+        "image": false,
         "numb": 4,
         "correct": 3,
         "question": "Welche Art von KI-Systemen ist im Rahmen der KI-Verordnung verboten, da sie ein inakzeptables Risiko darstellt?",
@@ -61,6 +66,7 @@ const questions = [
         ]
     },
     {
+        "image": false,
         "numb": 4,
         "correct": 2,
         "question": "Für wen gilt die Europäische KI-Verordnung in erster Linie?",
@@ -73,6 +79,7 @@ const questions = [
         ]
     },
     {
+        "image": false,
         "numb": 4,
         "correct": 1,
         "question": "Welches der folgenden KI-Anwendungsbeispiele wird von der KI-Verordnung typischerweise als 'Hochrisiko-KI' eingestuft?",
@@ -85,6 +92,7 @@ const questions = [
         ]
     },
     {
+        "image": false,
         "numb": 4,
         "correct": 2,
         "question": "Was ändert die KI-Verordnung für den Endverbraucher in seinem Alltag?",
@@ -97,6 +105,7 @@ const questions = [
         ]
     },
     {
+        "image": false,
         "numb": 4,
         "correct": 0,
         "question": "Welches der folgenden KI-Systeme hat wahrscheinlich ein minimales Risiko und ist daher kaum reguliert?",
@@ -109,6 +118,7 @@ const questions = [
         ]
     },
     {
+        "image": false,
         "numb": 4,
         "correct": 1,
         "question": "Was bedeutet die Einstufung 'Verbotene Praktiken' der KI-Verordnung für diese Anwendungen?",
@@ -127,6 +137,24 @@ const questions = [
         "correct": 1,
         "question": "Welches dieser Bilder ist KI generiert?",
         "options": ["quizImages/quest1-real.png", "quizImages/quest1-fake.png"]
+
+    },
+    {
+
+        "image": true,
+        "numb": 2,
+        "correct": 0,
+        "question": "Welches dieser Bilder ist KI generiert?",
+        "options": ["quizImages/quest2-fake.png", "quizImages/quest2-real.jpg"]
+
+    },
+    {
+
+        "image": true,
+        "numb": 2,
+        "correct": 1,
+        "question": "Welches dieser Bilder ist KI generiert?",
+        "options": ["quizImages/quest3-real.jpg", "quizImages/quest3-fake.jpg"]
 
     }
 ];
@@ -274,7 +302,7 @@ class Handler{
         //gehe Questions Json durch und erstelle für jeden Eintrag ein Question Objekt
         for (let i = 0; i < questions.length; i++) {
             let questOptions = questions[i];
-            if (questOptions.numb === 2) {
+            if (questOptions.image) {
                 let quest = new ImageQuestion(questOptions, this);
                 output.push(quest);
             } else {
