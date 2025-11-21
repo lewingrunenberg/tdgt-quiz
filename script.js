@@ -156,6 +156,47 @@ const questions = [
         "question": "Welches dieser Bilder ist KI generiert?",
         "options": ["quizImages/quest3-real.jpg", "quizImages/quest3-fake.jpg"]
 
+    },
+    {
+        "image": false,
+        "numb": 4,
+        "correct": 2,
+        "question": "Welche Risikokategorie gibt es in der KI-Verordnung nicht?",
+        "answer": "Absolutes Risiko",
+        "options": [
+            "Minimales Risiko",
+            "Geringes Risiko",
+            "Absolutes Risiko",
+            "Hochrisiko-KI (High-Risk AI)"
+        ]
+    },
+    {
+        "image": false,
+        "numb": 4,
+        "correct": 3,
+        "question": "Wie werden KI-Systeme nach der KI-Verordnung hauptsächlich reguliert?",
+        "answer": "Regulierung nach Risiko für Gesundheit, Sicherheit und Grundrechte",
+        "options": [
+            "Regulierung nach Größe",
+            "Regulierung nach wirtschaftlichen Wert",
+            "Regulierung nach dem Land, in dem die KI entwickelt wurde",
+            "Regulierung nach Risiko für Gesundheit, Sicherheit und Grundrechte"
+
+        ]
+    },
+    {
+        "image": false,
+        "numb": 4,
+        "correct": 2,
+        "question": "Wofür werden Trainingsdaten in KI-Systemen verwendet?",
+        "answer": "Zum Erlernen von Mustern und Regeln.",
+        "options": [
+            "Zur Dekoration der benutzeroberfläche.",
+            "Zur Bestimmung der Hardwareanforderungen.",
+            "Zum Erlernen von Mustern und Regeln.",
+            "Zum einrichten von Benutzerkonten"
+
+        ]
     }
 ];
 
