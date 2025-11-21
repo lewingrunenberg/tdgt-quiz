@@ -380,7 +380,9 @@ class Game{
 
                 //richtiges Ergebnis einblenden
                 correct.classList.add("correct");
-                correct.insertAdjacentHTML("beforeend", tickIconTag);
+                if (!correct.classList.contains("imageOption")) {
+                    correct.insertAdjacentHTML("beforeend", tickIconTag);
+                }
 
                 this.nextBtn.classList.add("show");
             }
@@ -588,6 +590,9 @@ class ImageQuestion extends Question {
 
     optionSelected(option) {
 
+        if (option.nodeName === "IMG") {
+            option = option.parentElement;
+        }
 
         let correct = this.optionList.children[this.correct];
 
@@ -597,9 +602,11 @@ class ImageQuestion extends Question {
         }
 
         if (option.isEqualNode(correct)) {
-            option.style.backgroundColor = "red";
+            option.classList.add("correct");
             this.handler.questionAnswered(true);
         } else {
+            option.classList.add("imageFalse");
+            correct.classList.add("correct");
             this.handler.questionAnswered(false);
         }
 

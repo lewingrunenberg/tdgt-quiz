@@ -451,10 +451,47 @@ footer button.show{
     .result_box .buttons button{
         width: 100%;
     }
+}
+.imageOption {
+    max-width: 100%;
+    max-height: 100%;
+}
 
-    img {
-        width: fit-content;
-        max-width: 500px;
-        max-height: 100%;
-    }
+.imageOption img{
+    width: 100%;
+    display: block;
+}
+
+.imageOption.imageFalse {
+    position: relative;
+}
+
+.imageFalse::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 0, 0, 0.5);
+    mix-blend-mode: multiply;
+}
+
+.imageOption.correct {
+    position: relative;
+}
+
+.imageOption.correct::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 255, 0, 0.5);
+    mix-blend-mode: multiply;
+}
+
+section .option_list .imageOption.disabled{
+    pointer-events: none;
 }
