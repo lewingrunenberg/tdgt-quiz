@@ -197,6 +197,24 @@ const questions = [
             "Zum einrichten von Benutzerkonten"
 
         ]
+    },
+    {
+
+        "image": true,
+        "numb": 2,
+        "correct": 1,
+        "question": "Welches dieser Bilder ist KI generiert?",
+        "options": ["quizImages/quest4-real.jpg", "quizImages/quest4-fake.png"]
+
+    },
+    {
+
+        "image": true,
+        "numb": 2,
+        "correct": 0,
+        "question": "Welches dieser Bilder ist KI generiert?",
+        "options": ["quizImages/quest5-fake.png", "quizImages/quest5-real.jpg"]
+
     }
 ];
 
