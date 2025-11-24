@@ -145,7 +145,7 @@ const questions = [
         "numb": 2,
         "correct": 0,
         "question": "Welches dieser Bilder ist KI generiert?",
-        "options": ["quizImages/quest2-fake.png", "quizImages/quest2-real.jpg"]
+        "options": ["quizImages/quest2-fake.jpg", "quizImages/quest2-real.jpg"]
 
     },
     {
@@ -207,23 +207,33 @@ const crossIconTag = '<div class="icon cross"><i class="fas fa-times"></i></div>
  * Handler der alles initialisiert und verwaltet
  */
 class Handler{
+    #questions;
+    #game;
+    #questPerGame;
+    #infoBox;
+    #startBtn;
+    #exitBtn;
+    #quizBox;
+    #resultBox;
+    #restartBtn;
+    #quitBtn;
 
     constructor() {
-        this.questions = this.generateQuestions();
-        this.game = null;
-        this.questPerGame = 5;
+        this.#questions = this.#generateQuestions();
+        this.#game = null;
+        this.#questPerGame = 5;
 
-        this.infoBox = document.querySelector(".info_box");
-        this.startBtn = this.infoBox.querySelector(".buttons .restart");
-        this.exitBtn = this.infoBox.querySelector(".buttons .quit");
-        this.quizBox = document.querySelector(".quiz_box");
+        this.#infoBox = document.querySelector(".info_box");
+        this.#startBtn = this.#infoBox.querySelector(".buttons .restart");
+        this.#exitBtn = this.#infoBox.querySelector(".buttons .quit");
+        this.#quizBox = document.querySelector(".quiz_box");
 
-        this.resultBox = document.querySelector(".result_box");
-        this.restartBtn = this.resultBox.querySelector(".buttons .restart");
-        this.quitBtn = this.resultBox.querySelector(".buttons .quit");
+        this.#resultBox = document.querySelector(".result_box");
+        this.#restartBtn = this.#resultBox.querySelector(".buttons .restart");
+        this.#quitBtn = this.#resultBox.querySelector(".buttons .quit");
 
-        this.exitBtn.onclick = () => this.infoBox.classList.remove("activeInfo");
-        this.setEvents();
+        this.#exitBtn.onclick = () => this.#infoBox.classList.remove("activeInfo");
+        this.#setEvents();
     };
 
     /**
@@ -231,9 +241,9 @@ class Handler{
      * @param {number}number Anzahl der Fragen im Spiel
      * @returns {*[]}
      */
-    generateSelection(number) {
+    #generateSelection(number) {
         let selection = [];
-        let max = this.questions.length;
+        let max = this.#questions.length;
         let output = [];
 
         for (let i = 0; i < number; i++) {
@@ -248,7 +258,7 @@ class Handler{
         }
 
         selection.forEach(index => {
-            output.push(this.questions[index]);
+            output.push(this.#questions[index]);
         });
 
         return output;
@@ -257,12 +267,12 @@ class Handler{
     /**
      * Erstellt Game Instanz und ruft game.start() auf
      */
-    startGame() {
-        let gameQuestions = this.generateSelection(this.questPerGame);
+    #startGame() {
+        let gameQuestions = this.#generateSelection(this.#questPerGame);
         let infoBox = document.querySelector(".info_box");
 
         infoBox.classList.remove("activeInfo")
-        this.quizBox.classList.add("activeQuiz");
+        this.#quizBox.classList.add("activeQuiz");
         this.game = new Game(this, gameQuestions);
         this.game.start();
     };
@@ -283,14 +293,14 @@ class Handler{
     finishGame() {
         let score = this.game.getCorrectAnswers();
 
-        this.quizBox.classList.remove("activeQuiz");
-        this.showResult(score);
+        this.#quizBox.classList.remove("activeQuiz");
+        this.#showResult(score);
     };
 
     /**
      * Close quiz and reload window
      */
-    finishQuiz() {
+    #finishQuiz() {
         this.game = null;
         window.location.reload();
     };
@@ -299,18 +309,17 @@ class Handler{
      * Funktion zum anzeigen des Result Screens
      * @param {number} score
      */
-    showResult(score) {
-        //TODO: Score überarbeiten. Ursprüngliches mit 10 Punkten ist vlt nicht so gut
+    #showResult(score) {
 
-        this.resultBox.classList.add("activeResult");
-        const scoreText = this.resultBox.querySelector(".score_text");
+        this.#resultBox.classList.add("activeResult");
+        const scoreText = this.#resultBox.querySelector(".score_text");
 
         if (score >= 4) {
-            scoreText.innerHTML = `<span>Glückwunsch! 🎉 Du hast <p>${score}</p> von <p>${this.questPerGame}</p> Punkten erreicht.</span>`;
+            scoreText.innerHTML = `<span>Glückwunsch! 🎉 Du hast <p>${score}</p> von <p>${this.#questPerGame}</p> Punkten erreicht.</span>`;
         } else if (score >= 3) {
-            scoreText.innerHTML = `<span>Gute Leistung! <p>${score}</p> von <p>${this.questPerGame}</p> Punkten.</span>`;
+            scoreText.innerHTML = `<span>Gute Leistung! <p>${score}</p> von <p>${this.#questPerGame}</p> Punkten.</span>`;
         } else {
-            scoreText.innerHTML = `<span>Schade 😐, nur <p>${score}</p> von <p>${this.questPerGame}</p> Punkten.</span>`;
+            scoreText.innerHTML = `<span>Schade 😐, nur <p>${score}</p> von <p>${this.#questPerGame}</p> Punkten.</span>`;
         }
     };
 
@@ -318,26 +327,26 @@ class Handler{
      * onclick Funktion zum anzeigen der Informationen
      */
     showInfo() {
-        this.infoBox.classList.add("activeInfo");
+        this.#infoBox.classList.add("activeInfo");
     };
 
     /**
      * onclick Funktion um das Quiz neu zu starten
      */
-    resetQuiz() {
-        this.resultBox.classList.remove("activeResult");
+    #resetQuiz() {
+        this.#resultBox.classList.remove("activeResult");
 
         // Setze den nextBtn zurück
         let nxtBtn = this.game.getNextBtn();
         nxtBtn.textContent = "Nächste Frage";
-        this.startGame();
+        this.#startGame();
     };
 
     /**
      * Erstellt die Fragen objekte
      * @returns {*[]}
      */
-    generateQuestions() {
+    #generateQuestions() {
         let output = [];
 
         //gehe Questions Json durch und erstelle für jeden Eintrag ein Question Objekt
@@ -359,10 +368,10 @@ class Handler{
     /**
      * Helper Funktion zum verteilen der onclick Funktionen
      */
-    setEvents() {
-        this.startBtn.onclick = () => this.startGame();
-        this.quitBtn.onclick = () => this.finishQuiz();
-        this.restartBtn.onclick = () => this.resetQuiz();
+    #setEvents() {
+        this.#startBtn.onclick = () => this.#startGame();
+        this.#quitBtn.onclick = () => this.#finishQuiz();
+        this.#restartBtn.onclick = () => this.#resetQuiz();
     };
 }
 
@@ -373,17 +382,24 @@ class Handler{
  * Kümmert sich um die Funktionen während ein Quiz läuft
  */
 class Game{
+    #handler;
+    #questions;
+    #nextBtn;
+    #correctlyAnswered;
+    #totalQuestions;
+    #currQuestion;
     counter;
     counterLine;
-    constructor(handler, questions) {
-        this.handler = handler;
-        this.questions = questions;
-        this.nextBtn = document.querySelector("footer .next_btn");
-        this.correctlyAnswered = 0;
-        this.totalQuestions = this.questions.length;
-        this.currQuestion = 0;
 
-        this.nextBtn.onclick = () => this.nextQuestion();
+    constructor(handler, questions) {
+        this.#handler = handler;
+        this.#questions = questions;
+        this.#nextBtn = document.querySelector("footer .next_btn");
+        this.#correctlyAnswered = 0;
+        this.#totalQuestions = this.#questions.length;
+        this.#currQuestion = 0;
+
+        this.#nextBtn.onclick = () => this.#nextQuestion();
     };
 
     /**
@@ -401,15 +417,15 @@ class Game{
 
         // Falls Frage korrekt, zähle this.correctlyAnswered hoch
         if (correctly) {
-            this.correctlyAnswered++;
+            this.#correctlyAnswered++;
         }
 
         // Falls letzte Frage: ändere Text zu "Fertig" um
-        if (this.currQuestion >= this.totalQuestions - 1) {
-            this.nextBtn.textContent = "Fertig";
+        if (this.#currQuestion >= this.#totalQuestions - 1) {
+            this.#nextBtn.textContent = "Fertig";
         }
 
-        this.nextBtn.classList.add("show");
+        this.#nextBtn.classList.add("show");
 
     };
 
@@ -417,12 +433,12 @@ class Game{
      * Startet und aktualisiert den Timer in der oberen rechten Ecke
      * @param {number} time Zeit zum beantworten der Fragen
      */
-    startTimer(time) {
+    #startTimer(time) {
 
         let timeText = document.querySelector(".timer .time_left_txt");
         let timeCount = document.querySelector(".timer .timer_sec");
         let timer = time;
-        let current = this.questions[this.currQuestion];
+        let current = this.#questions[this.#currQuestion];
         let optionField = current.getOptionList();
 
         timeCount.textContent = String(timer);
@@ -453,7 +469,7 @@ class Game{
                     correct.insertAdjacentHTML("beforeend", tickIconTag);
                 }
 
-                this.nextBtn.classList.add("show");
+                this.#nextBtn.classList.add("show");
             }
         }, 1000);
     };
@@ -461,7 +477,7 @@ class Game{
     /**
      * Startet die Timer Linie unter dem Titel
      */
-    startTimerLine() {
+    #startTimerLine() {
         //TODO: Linie gleich mit Zeit laufen lassen: Linie hört nach 28/29 Sekunden auf
 
         // Momentane Breite der Anzeige Linie
@@ -484,9 +500,9 @@ class Game{
     /**
      * Funktion um den Rundenstand unten Links zu aktualisieren
      */
-    updateCounter() {
+    #updateCounter() {
         let questionCounter =  document.querySelector("footer .total_que");
-        questionCounter.innerHTML = `<span><p>${this.currQuestion + 1}</p> von <p>${this.questions.length}</p></span>`;
+        questionCounter.innerHTML = `<span><p>${this.#currQuestion + 1}</p> von <p>${this.#questions.length}</p></span>`;
     };
 
     /**
@@ -494,26 +510,26 @@ class Game{
      *
      * ruft handler.finishGame auf wenn letzte Frage beantwortet wurde
      */
-    nextQuestion() {
+    #nextQuestion() {
 
         // "Nächste Frage" Knopf ausblenden
-        this.nextBtn.classList.remove("show");
+        this.#nextBtn.classList.remove("show");
 
         // Checke ob Frage letzte Frage ist
-        if (this.currQuestion < this.totalQuestions - 1) {
+        if (this.#currQuestion < this.#totalQuestions - 1) {
 
-            this.currQuestion++;
+            this.#currQuestion++;
 
-            this.updateCounter();
-            this.questions[this.currQuestion].show();
+            this.#updateCounter();
+            this.#questions[this.#currQuestion].show();
 
-            this.startTimer(60);
-            this.startTimerLine();
+            this.#startTimer(60);
+            this.#startTimerLine();
 
         } else {
 
             // Beende Quiz
-            this.handler.finishGame();
+            this.#handler.finishGame();
         }
     };
 
@@ -523,22 +539,22 @@ class Game{
      * Syntax ähnlich wie bei nextQuestion
      */
     start() {
-        this.updateCounter();
-        this.questions[this.currQuestion].show();
-        this.nextBtn.classList.remove("show");
+        this.#updateCounter();
+        this.#questions[this.#currQuestion].show();
+        this.#nextBtn.classList.remove("show");
 
-        this.startTimer(60);
-        this.startTimerLine();
+        this.#startTimer(60);
+        this.#startTimerLine();
     }
 
     /**getter Funktion für this.correctlyAnswered*/
     getCorrectAnswers() {
-        return this.correctlyAnswered;
+        return this.#correctlyAnswered;
     };
 
     /**getter Funktion für this.nextBtn*/
     getNextBtn() {
-        return this.nextBtn;
+        return this.#nextBtn;
     };
 }
 
@@ -574,7 +590,7 @@ class Question{
      *
      * ruft die Mediator-Funktion handler.questionAnswered auf
      */
-    optionSelected(option){
+    #optionSelected(option){
 
         // fängt Problem von this.show() ab
         if (option.nodeName === "SPAN") {
@@ -616,7 +632,7 @@ class Question{
 
         const option = this.optionList.querySelectorAll(".option");
         option.forEach(opt => {
-            opt.onclick = (e) => this.optionSelected(e.target);
+            opt.onclick = (e) => this.#optionSelected(e.target);
             });
     };
 
@@ -645,20 +661,22 @@ class ImageQuestion extends Question {
 
     show() {
 
-        //TODO: correctly size image; add red/green border for false/correct answer
+        //Zeige Bilder an
         this.questionElement.innerHTML = `<span>${this.question}</span>`;
         this.optionList.innerHTML = this.options
             .map(option => `<div class="imageOption"><img src=${option} alt="fehler"></div>`)
             .join("");
 
+        //Bestimme onClick Events
         const option = this.optionList.querySelectorAll(".imageOption");
         option.forEach(opt => {
-            opt.onclick = (e) => this.optionSelected(e.target);
+            opt.onclick = (e) => this.#optionSelected(e.target);
         });
     }
 
-    optionSelected(option) {
+    #optionSelected(option) {
 
+        //Selbes Abfangen wie bei ParentClass, jetzt mit img
         if (option.nodeName === "IMG") {
             option = option.parentElement;
         }
@@ -670,6 +688,7 @@ class ImageQuestion extends Question {
             this.optionList.children[i].classList.add("disabled");
         }
 
+        //Checke, ob korrekte Auswahl
         if (option.isEqualNode(correct)) {
             option.classList.add("correct");
             this.handler.questionAnswered(true);
