@@ -204,7 +204,7 @@ const questions = [
         "numb": 2,
         "correct": 1,
         "question": "Welches dieser Bilder ist KI generiert?",
-        "options": ["quizImages/quest4-real.jpg", "quizImages/quest4-fake.png"]
+        "options": ["quizImages/quest4-real.JPG", "quizImages/quest4-fake.png"]
 
     },
     {
