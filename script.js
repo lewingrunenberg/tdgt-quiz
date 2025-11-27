@@ -178,7 +178,7 @@ const questions = [
         "answer": "Regulierung nach Risiko für Gesundheit, Sicherheit und Grundrechte",
         "options": [
             "Regulierung nach Größe",
-            "Regulierung nach wirtschaftlichen Wert",
+            "Regulierung nach wirtschaftlichem Wert",
             "Regulierung nach dem Land, in dem die KI entwickelt wurde",
             "Regulierung nach Risiko für Gesundheit, Sicherheit und Grundrechte"
 
